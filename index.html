@@ -7,11 +7,8 @@
     <title>Download AOM - Android Outline Manager</title>
 
     <meta property="og:title" content="AOM - Android Outline Manager">
-    
-    <meta property="og:description" content="Manage your Outline VPN servers easily and securely. Download the App now for free.">
-    
+    <meta property="og:description" content="Manage your Outline VPN servers easily and securely.">
     <meta property="og:image" content="https://ulaygyidev.github.io/AOM/aom_logo.jpg">
-    
     <meta property="og:url" content="https://ulaygyidev.github.io/AOM/">
     <meta property="og:type" content="website">
 
@@ -28,7 +25,7 @@
             border-radius: 5px; 
             font-size: 18px; 
             font-weight: bold;
-            display: inline-block; /* Button ပုံစံပီပြင်စေရန် */
+            display: inline-block;
             margin-top: 10px;
         }
         .logo { 
@@ -37,7 +34,12 @@
             margin-bottom: 20px; 
             border-radius: 20px; 
             box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-            object-fit: cover; /* ပုံမရိပ်အောင် */
+            object-fit: cover;
+        }
+        .count-text {
+            color: #B0BEC5;
+            margin-top: 15px;
+            font-size: 14px;
         }
     </style>
 </head>
@@ -49,9 +51,36 @@
     <p>Manage your Outline VPN servers easily and securely.</p>
     <br>
     
-    <a href="https://github.com/ULayGyiDev/Repository-Name/releases/download/v1.0/app-release.apk" class="btn">Download APK</a>
+    <a href="#" id="downloadBtn" class="btn">Loading...</a>
+    
+    <p class="count-text">
+        Total Downloads: <span id="downloadCount">0</span> 🚀
+    </p>
     
     <br><br><br>
     <small><a href="privacy.html" style="color: #B0BEC5;">Privacy Policy</a></small>
+
+    <script>
+        const USERNAME = "ULayGyiDev";
+        const REPO_NAME = "AOM"; 
+        fetch(`https://api.github.com/repos/${USERNAME}/${REPO_NAME}/releases/latest`)
+        .then(response => response.json())
+        .then(data => {
+            const apkAsset = data.assets.find(asset => asset.name.endsWith(".apk"));
+
+            if (apkAsset) {
+                const btn = document.getElementById("downloadBtn");
+                btn.href = apkAsset.browser_download_url;
+                btn.innerText = "Download APK (v" + data.tag_name + ")"; 
+                document.getElementById("downloadCount").innerText = apkAsset.download_count;
+            } else {
+                document.getElementById("downloadBtn").innerText = "Download Not Available";
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching release data:', error);
+            document.getElementById("downloadBtn").innerText = "Download Error";
+        });
+    </script>
 </body>
 </html>
